@@ -22,10 +22,6 @@ var createACube = function() {
     }
     var material = new THREE.MeshBasicMaterial( { color: 0xffffff, vertexColors: true } );
     braço1 = new THREE.Mesh( geometry, material );
-    
-    var material = new THREE.MeshBasicMaterial( { color: 0xffffff, vertexColors: true } );
-    braço2 = new THREE.Mesh( geometry, material );
-
 
     var geometry2 = new THREE.SphereGeometry(2, 32,32);
     var material2 = new THREE.MeshBasicMaterial( { color: 0xffffff} );
@@ -36,13 +32,19 @@ var createACube = function() {
     var geometry3 = new THREE.SphereGeometry(2, 32,32);
     var material3 = new THREE.MeshBasicMaterial( { color: 0xffffff} );
     cotovelo = new THREE.Mesh(geometry3, material3);
-    cotovelo.position.y+=5;
-    braço2.add(cotovelo);
+    cotovelo.position.y-=5;
+    braço1.add(cotovelo);
+
+    var geometry4 = new THREE.BoxGeometry( 2, 10, 2 );
+    var material4 = new THREE.MeshBasicMaterial( { color: 0xffffff, vertexColors: true } );
+    braço2 = new THREE.Mesh( geometry4, material4 );
+    cotovelo.add(braço2);
+    braço2.position.y+=0;
 
     pivot = new THREE.Group();
     pivot.position.set(0,0,0);
     pivot.add(braço1);
-
+  
     pivot2 = new THREE.Group();
     pivot2.position.set(0,0,0);
     pivot2.add(braço2);
