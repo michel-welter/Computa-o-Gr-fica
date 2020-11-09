@@ -21,43 +21,44 @@ var createACube = function() {
 
     }
     var material = new THREE.MeshBasicMaterial( { color: 0xffffff, vertexColors: true } );
-    braço1 = new THREE.Mesh( geometry, material );
+    cubo = new THREE.Mesh( geometry, material );
+    
 
     var geometry2 = new THREE.SphereGeometry(2, 32,32);
     var material2 = new THREE.MeshBasicMaterial( { color: 0xffffff} );
-    ombro = new THREE.Mesh(geometry2, material2);
-    ombro.position.y+=5;
-    braço1.add(ombro);
-
-    var geometry3 = new THREE.SphereGeometry(2, 32,32);
-    var material3 = new THREE.MeshBasicMaterial( { color: 0xffffff} );
-    cotovelo = new THREE.Mesh(geometry3, material3);
-    cotovelo.position.y-=5;
-    braço1.add(cotovelo);
-
-    var geometry4 = new THREE.BoxGeometry( 2, 10, 2 );
-    var material4 = new THREE.MeshBasicMaterial( { color: 0xffffff, vertexColors: true } );
-    braço2 = new THREE.Mesh( geometry4, material4 );
-    cotovelo.add(braço2);
-    braço2.position.y+=0;
+    sphere = new THREE.Mesh(geometry2, material2);
+    sphere.position.y-=5;
+    cubo.add(sphere);
+    
 
     pivot = new THREE.Group();
     pivot.position.set(0,0,0);
-    pivot.add(braço1);
-  
+    pivot.add(cubo); //adicinou ombro ao pivo
+    scene.add(pivot);
+    cubo.position.y+=pivot.position.x+5;
+
+
+    var geometry3 = new THREE.SphereGeometry(2, 32,32); 
+    var material3 = new THREE.MeshBasicMaterial( { color: 0xD9CEAC} );
+    sphere2 = new THREE.Mesh(geometry3, material3);
+    cubo.add(sphere2);
+    sphere2.position.y+=6;
+
     pivot2 = new THREE.Group();
     pivot2.position.set(0,0,0);
-    pivot2.add(braço2);
+    sphere2.add( pivot2 );
+
+    var geometry4 = new THREE.BoxGeometry( 2, 10, 2 ); 
+    var material4 = new THREE.MeshBasicMaterial( { color: 0xD9CEAC} );
+    cubo2 = new THREE.Mesh( geometry4, material4 );
+    pivot2.add( cubo2 );
+    cubo2.position.y+=5;
 
 
-    scene.add(pivot);
-    braço1.position.y+=pivot.position.x+5;
 
-    scene.add(pivot2);
-    braço2.position.y+=pivot2.position.x-5;
+    
 
 };
-
 var init = function() {
 
     scene = new THREE.Scene();
@@ -93,32 +94,32 @@ var rotationVelocity = 0.1;
 var onKeyDown = function(e){
     console.log(e.keyCode);
     if(e.keyCode == 37){
-        braço1.position.x-=velocity;
+        cubo.position.x-=velocity;
     }
-    if (e.keyCode == 32){ //espaÃ§o -> rotaÃ§Ã£o pelo pivo.
+    if (e.keyCode == 32){ //espaco -> rotacao pelo pivo.
         
         console.log("Z: "+ pivot.rotation.z);
-        if (pivot.rotation.z > 3.3 || pivot.rotation.z < 0){
+        if (pivot.rotation.z > 2.8 || pivot.rotation.z < 0){
             rotationVelocity*=-1;
         }
         pivot.rotation.z+=rotationVelocity; 
        // pivo.rotation.y+=0.1;
     }
     if (e.keyCode == 187){ // +
-        braço1.scale.x+=0.1;
-        braço1.scale.y+=0.1;
-        braço1.scale.z+=0.1;
+        cubo.scale.x+=0.1;
+        cubo.scale.y+=0.1;
+        cubo.scale.z+=0.1;
     }
     if (e.keyCode == 189){ // -
-        braço1.scale.x-=0.1;
-        braço1.scale.y-=0.1;
-        braço1.scale.z-=0.1;
+        cubo.scale.x-=0.1;
+        cubo.scale.y-=0.1;
+        cubo.scale.z-=0.1;
     }
 
     if(e.keyCode == 37){
-        braço2.position.x-=velocity;
+        cubo2.position.x-=velocity;
     }
-    if (e.keyCode == 90){ //z -> rotaÃ§Ã£o pelo pivo.
+    if (e.keyCode == 90){ //z -> rotacao pelo pivo.
         
         console.log("Z: "+ pivot2.rotation.z);
         if (pivot2.rotation.z > 2.5 || pivot2.rotation.z < 0){
@@ -128,14 +129,14 @@ var onKeyDown = function(e){
        // pivo.rotation.y+=0.1;
     }
     if (e.keyCode == 187){ // +
-        braço2.scale.x+=0.1;
-        braço2.scale.y+=0.1;
-        braço2.scale.z+=0.1;
+        cubo2.scale.x+=0.1;
+        cubo2.scale.y+=0.1;
+        cubo2.scale.z+=0.1;
     }
     if (e.keyCode == 189){ // -
-        braço2.scale.x-=0.1;
-        braço2.scale.y-=0.1;
-        braço2.scale.z-=0.1;
+        cubo2.scale.x-=0.1;
+        cubo2.scale.y-=0.1;
+        cubo2.scale.z-=0.1;
     }
 }
 
@@ -149,13 +150,13 @@ var cliquePressionado = false; //para controlar o tempo que o cara esta pression
 
 var onMouseDown = function(e){
     cliquePressionado = true;
-    //console.log("Apertou Clicou")
+    console.log("Apertou Clicou")
 }
 
 
 var onMouseUp = function(e){
     cliquePressionado = false;
-  //  console.log("SOltou o clique");
+    console.log("SOltou o clique");
 }
 
 
@@ -170,11 +171,11 @@ var onMouseMouse = function (e){
         //cube.position.x += deltaMovimento.x*0.01;
         //cube.position.y += deltaMovimento.y*0.01*-1;
 
-        braço1.rotation.x += toRadians(deltaMovimento.y*1)*0.5;
-        braço1.rotation.y += toRadians(deltaMovimento.x*1)*0.5;
+        cubo.rotation.x += toRadians(deltaMovimento.y*1)*0.5;
+        cubo.rotation.y += toRadians(deltaMovimento.x*1)*0.5;
 
-        braço2.rotation.x += toRadians(deltaMovimento.y*1)*0.5;
-        braço2.rotation.y += toRadians(deltaMovimento.x*1)*0.5;
+        cubo2.rotation.x += toRadians(deltaMovimento.y*1)*0.5;
+        cubo2.rotation.y += toRadians(deltaMovimento.x*1)*0.5;
     }
 
     posicaoMouser = {  //nova posiÃ§Ã£o do mouser
